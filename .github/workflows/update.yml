@@ -1,0 +1,54 @@
+name: Update manifest
+
+# Checks for a new sys1 release every hour, regenerates bucket/sys1.json from
+# the release's published SHA-256 checksums, then installs and tests it with
+# real Scoop. Uses only this repo's own token.
+on:
+  schedule:
+    - cron: "23 * * * *"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag (empty = latest)"
+        required: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Regenerate manifest
+        run: ./scripts/update-manifest.sh "${{ github.event.inputs.tag }}"
+      - name: Commit if changed
+        run: |
+          if git diff --quiet; then echo "Already up to date."; exit 0; fi
+          git config user.name "A-Hackers-Guide"
+          git config user.email "289517818+A-Hackers-Guide@users.noreply.github.com"
+          v=$(python3 -c "import json;print(json.load(open('bucket/sys1.json'))['version'])")
+          git commit -am "sys1: Update to version $v"
+          git push
+
+  test:
+    needs: update
+    runs-on: windows-latest
+    steps:
+      - name: Install Scoop
+        shell: pwsh
+        run: |
+          Invoke-RestMethod -Uri https://get.scoop.sh -OutFile install-scoop.ps1
+          ./install-scoop.ps1 -RunAsAdmin
+          "$env:USERPROFILE\scoop\shims" | Out-File -FilePath $env:GITHUB_PATH -Append
+      - name: Install sys1 from this bucket and run it
+        shell: pwsh
+        run: |
+          scoop bucket add a-hackers-guide "https://github.com/${{ github.repository }}"
+          scoop install a-hackers-guide/sys1
+          sys0 version
+          sys1 version
