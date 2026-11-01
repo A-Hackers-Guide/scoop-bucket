@@ -1,16 +1,16 @@
 {
-    "version": "0.3.0",
+    "version": "0.4.0",
     "description": "Pool the spare power of every computer into one cloud. Installs sys0 (client) and sys1 (node).",
     "homepage": "https://a-hackers-guide.github.io/sys1/",
     "license": "Unlicense",
     "architecture": {
         "64bit": {
-            "url": "https://github.com/A-Hackers-Guide/sys1/releases/download/v0.3.0/sys1_0.3.0_windows_amd64.zip",
-            "hash": "b199408b4fdb0505b607ae14252d3682a14577309af0f83c5fca9169ec3ffb80"
+            "url": "https://github.com/A-Hackers-Guide/sys1/releases/download/v0.4.0/sys1_0.4.0_windows_amd64.zip",
+            "hash": "28ad8554f88b12fe034a464b1feafe72e3e65ebb76c148ff04bae36ef182c5aa"
         },
         "arm64": {
-            "url": "https://github.com/A-Hackers-Guide/sys1/releases/download/v0.3.0/sys1_0.3.0_windows_arm64.zip",
-            "hash": "3eb28ce76d42cc9954b1d653529a55f231291c4940e446b159c9130af30ac668"
+            "url": "https://github.com/A-Hackers-Guide/sys1/releases/download/v0.4.0/sys1_0.4.0_windows_arm64.zip",
+            "hash": "d00d839cf2a8b27726ac0493e1c7b26f3fc78fb11086efe1b06921a789dc49a0"
         }
     },
     "bin": ["sys0.exe", "sys1.exe"],
